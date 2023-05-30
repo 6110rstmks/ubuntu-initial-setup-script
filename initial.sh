@@ -1,3 +1,22 @@
+# ubuntu initial setup script when I install ubuntu
+
+install list
+" composer ✓
+" 日本語入力 Japanese input ✓
+" npm ✓
+" git ✓
+" vim ✓
+" docker  ✓
+" gnome extension ✓
+" phpmyadmin　✓
+" typescript
+" tweak ✓
+" aws-cli
+" gnome-shell-extensions ✓
+" gnome-shell-extension-manager ✓
+
+
+```
 #!bin/bash
 
 sudo su
@@ -6,7 +25,20 @@ sudo apt update
 
 sudo apt install npm -y
 sudo apt install git -y
+git config --global user.name "6110rstmks"
+git config --global user.email "soras.k.m.tj16@gmail.com"
 sudo apt install vim -y
+# sudo apt install awscli -y
+sudo apt install npm -y
+
+# node version up
+sudo apt update
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+
+source ~/.bashrc
+
+nvm install v18.14.2
 
 # composer install
 sudo apt install php-curl -y
@@ -15,13 +47,13 @@ sudo apt install php-mbstring -y
 sudo apt install composer -y
 # --------------------------------
 
-sudo apt install mysql-server -y
-sudo apt install mysql-client -y
+# sudo apt install mysql-server -y
+# sudo apt install mysql-client -y
 
 # php-mysql driver
 sudo apt-get install php*-mysql 
 
-# 作成したユーザではコマンドラインからクエリを操作できるが、root userで行うことができない
+# 作成したユーザではコマンドラインからクエリを操作できるが、なぜだかroot userで行うことができない
 # There should not be a space between your password and the -p when you pass it on the command-line!
 mysql -u ss119 -p119089 <<My_Query
 create database unko;
@@ -30,26 +62,80 @@ GRANT ALL ON *.* TO 'unko'@'localhost' WITH GRANT OPTION;
 My_Query
 
 # capslock をctrlにする
+# ファイルに追記はできているが、これではうまくいかないっぽい
 sed -i 's/XKBOPTIONS=""/XKBOPTIONS="ctrl:nocaps"/' /etc/default/keyboard
 
+# chrome setting(safesearch, etc...)
+sudo mkdir /etc/opt/chrome/policies
+sudo mkdir /etc/opt/chrome/policies/managed
+sudo touch /etc/opt/chrome/policies/managed/setting.json
+sudo chmod 777 /etc/opt/chrome/policies/managed/setting.json
+
+echo '{"IncognitoModeAvailability": 1, "BrowserGuestModeEnabled": false, "BrowserAddPersonEnabled": 0, "ForceGoogleSafeSearch": true, "ForceYouTubeRestrict": 2}
+' > /etc/opt/chrome/policies/managed/setting.json
+
+# hosts file setting
+cd /etc
+echo -e '127.0.0.1 bing.com\n127.0.0.1 duckduckgo.com' >> hosts
 
 
-systemctl enable mysqld
+# systemctl enable mysqld
 
 
 sudo apt install gnome-tweaks -y
 
-sudo apt install gnome-shell-extensions
+sudo apt install gnome-shell-extensions -y
 
-
-sudo apt install apache2 -y
+# use xampp instead of individual apache2
+# sudo apt install apache2 -y
+# sudo systemctl stop apache2
 
 # 日本語入力 Japanese input
 sudo apt install ibus-mozc -y
 ibus restart 
 gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'jp'), ('ibus', 'mozc-jp')]"
 
-# docker
+# github multiple account
+
+cd ~
+cd .ssh
+echo '
+Host github-js
+  HostName github.com
+  IdentityFile ~/.ssh/js/id_rsa
+  User git
+  Port 22
+  TCPKeepAlive yes
+  IdentitiesOnly yes
+
+Host github-php
+  HostName github.com
+  IdentityFile ~/.ssh/php/id_rsa
+  User git
+  Port 22
+  TCPKeepAlive yes
+  IdentitiesOnly yes
+'  > config
+
+cd ..
+echo '
+function githubjs()
+{
+ git config --global user.name "js-rstmks"
+ git config --global user.email "javascript.skmtsr@gmail.com"
+ ssh -T git@github.com
+}
+
+function githubphp()
+{
+ git config --global user.name "php-rstmks"
+ git config --global user.email "php.skmtsr@gmail.com"
+ ssh -T git@github.com
+}
+' >> .bashrc
+
+
+# docker install
 sudo apt-get install \
     ca-certificates \
     curl \
@@ -67,15 +153,31 @@ echo \
 # ここでのsudo apt updateは必須
 sudo apt update
 
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
 # docker desktop for ubuntu
 
 wget https://desktop.docker.com/linux/main/amd64/docker-desktop-4.17.0-amd64.deb
 
-sudo apt install ./docker-desktop-4.17.0-amd64.deb 
+sudo apt install ./docker-desktop-4.17.0-amd64.deb -y
+
+# use docker cmd without sudo.
+sudo groupadd docker
+sudo gpasswd -a $USER docker
+newgrp docker
+
+# xampp
+wget https://www.apachefriends.org/xampp-files/8.1.1/xampp-linux-x64-8.1.1-2-installer.run
+
+chmod a+x xampp-linux-*-installer.run
+
+sudo ./xampp-linux-x64-8.1.1-2-installer.run
+sudo apt install net-tools -y
+
 
 # typescript 
+
+# gnome-extension gui 関連のやつ
 
 
 # gnome-extensionのinstallを自動化する
@@ -101,5 +203,10 @@ done
 sudo apt install phpmyadmin -y
 # processがロックされてしまうので、一番下にもってくる
 
+# dockerを非rootで実行するには再起動する必要がある
+sudo shutdown -r now
+
 
 # -------------------------------
+
+# 
