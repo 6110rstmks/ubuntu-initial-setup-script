@@ -1,22 +1,3 @@
-# ubuntu initial setup script when I install ubuntu
-
-install list
-" composer ✓
-" 日本語入力 Japanese input ✓
-" npm ✓
-" git ✓
-" vim ✓
-" docker  ✓
-" gnome extension ✓
-" phpmyadmin　✓
-" typescript
-" tweak ✓
-" aws-cli
-" gnome-shell-extensions ✓
-" gnome-shell-extension-manager ✓
-
-
-```
 #!bin/bash
 
 sudo su
