@@ -96,7 +96,42 @@ Host github-php
   Port 22
   TCPKeepAlive yes
   IdentitiesOnly yes
+
+Host github-python
+  HostName github.com
+  IdentityFile ~/.ssh/python/id_rsa
+  User git
+  Port 22
+  TCPKeepAlive yes
+  IdentitiesOnly yes
+
+Host github-docker
+  HostName github.com
+  IdentityFile ~/.ssh/docker/id_rsa
+  User git
+  Port 22
+  TCPKeepAlive yes
+  IdentitiesOnly yes
+
+Host github-terraform
+  HostName github.com
+  IdentityFile ~/.ssh/terraform/id_rsa
+  User git
+  Port 22
+  TCPKeepAlive yes
+  IdentitiesOnly yes
+
+Host github-dataenginnering
+  HostName github.com
+  IdentityFile ~/.ssh/dataengineering/id_rsa
+  User git
+  Port 22
+  TCPKeepAlive yes
+  IdentitiesOnly yes
+
 '  > config
+
+
 
 cd ..
 echo '
@@ -112,6 +147,30 @@ function githubphp()
  git config --global user.name "php-rstmks"
  git config --global user.email "php.skmtsr@gmail.com"
  ssh -T git@github.com
+}
+
+function githubpython()
+{
+ git config --global user.name "pytho-rstmks"
+ git config --global user.email "python.skmtsr@gmail.com"
+}
+
+function githubdocker()
+{
+ git config --global user.name "docker-rstmks"
+ git config --global user.email "docker.skmtsr@gmail.com"
+}
+
+function githubterraform()
+{
+ git config --global user.name "terraform-rstmks"
+ git config --global user.email "terraform.skmtsr@gmail.com"
+}
+
+function githubdataengineering()
+{
+ git config --global user.name "dataengineering-rstmks"
+ git config --global user.email "dataengineering.skmtsr@gmail.com"
 }
 ' >> .bashrc
 
