@@ -174,6 +174,31 @@ function githubdataengineering()
 }
 ' >> .bashrc
 
+sudo mkdir /etc/apt/preference.d
+cd /etc/apt/preference.d
+sudo touch firefox.pref
+sudo touch snapd.pref
+sudo touch microsoft-edge-stable.pref
+sudo touch brave-browser.pref
+
+echo '
+Package: snapd
+Pin: release *
+Pin-Priority: -1
+' >> snapd.pref
+
+echo '
+Package: microsoft-edge-stable
+Pin: release *
+Pin-Priority: -1
+' >> microsoft-edge-stable.pref
+
+echo '
+Package: brave-browser
+Pin: release *
+Pin-Priority: -1
+' >> brave-browser.pref
+
 
 # docker install
 sudo apt-get install \
